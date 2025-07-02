@@ -3,6 +3,7 @@ const cellBtn = document.querySelectorAll(".cell");
 const rounDcounter = document.querySelector(".rounDcounter");
 const restartBtn = document.querySelector(".restart-btn");
 const statusText = document.querySelector(".status-text");
+const strike = document.querySelector(".strike");
 
 const player = "X";
 const bot = "O";
@@ -12,14 +13,14 @@ let gameState = ["", "", "", "", "", "", "", "", ""];
 let isPlayerTurn = true;
 
 const winningConditions = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6]
+    { combo: [0, 1, 2], strikeClass: "strike-row-1" },
+    { combo: [3, 4, 5], strikeClass: "strike-row-2" },
+    { combo: [6, 7, 8], strikeClass: "strike-row-3" },
+    { combo: [0, 3, 6], strikeClass: "strike-col-1" },
+    { combo: [1, 4, 7], strikeClass: "strike-col-2" },
+    { combo: [2, 5, 8], strikeClass: "strike-col-3" },
+    { combo: [0, 4, 8], strikeClass: "strike-diag-1" },
+    { combo: [2, 4, 6], strikeClass: "strike-diag-2" },
 ];
 
 function handleCellClick(clickedCellEvent) {
@@ -33,8 +34,9 @@ function handleCellClick(clickedCellEvent) {
     makeMove(clickedCellIndex, player);
     isPlayerTurn = false;
 
-    if (checkWin(gameState, player)) {
-        endGame("Kazandın!");
+    const playerWin = checkWin(gameState, player);
+    if (playerWin) {
+        endGame("Kazandın!", playerWin.strikeClass);
         return;
     } else if (isDraw(gameState)) {
         endGame("Berabere!");
@@ -42,13 +44,13 @@ function handleCellClick(clickedCellEvent) {
     }
 
     statusText.innerHTML = 'Bot düşünüyor...';
-    // Botun hamlesi için küçük bir gecikme ekleyelim
     setTimeout(() => {
         const bestMove = getBestMove(gameState);
         makeMove(bestMove, bot);
 
-        if (checkWin(gameState, bot)) {
-            endGame("Bot Kazandı!");
+        const botWin = checkWin(gameState, bot);
+        if (botWin) {
+            endGame("Bot Kazandı!", botWin.strikeClass);
         } else if (isDraw(gameState)) {
             endGame("Berabere!");
         } else {
@@ -68,18 +70,25 @@ function makeMove(index, currentPlayer) {
 }
 
 function checkWin(board, currentPlayer) {
-    return winningConditions.some(combination => {
-        return combination.every(index => board[index] === currentPlayer);
-    });
+    for (const condition of winningConditions) {
+        const { combo, strikeClass } = condition;
+        if (combo.every(index => board[index] === currentPlayer)) {
+            return { strikeClass: strikeClass };
+        }
+    }
+    return null;
 }
 
 function isDraw(board) {
     return board.every(cell => cell !== "");
 }
 
-function endGame(message) {
+function endGame(message, strikeClass) {
     statusText.innerHTML = message;
     gameActive = false;
+    if (strikeClass) {
+        strike.classList.add(strikeClass);
+    }
 }
 
 function handleRestartGame() {
@@ -92,9 +101,10 @@ function handleRestartGame() {
         cell.classList.remove('x', 'o');
     });
     document.querySelector('.rounDcounter').innerHTML = 'X';
+    strike.className = "strike";
 }
 
-// Minimax Algoritması
+// Minimax Algorithm
 function getBestMove(board) {
     let bestVal = -Infinity;
     let move = -1;
@@ -103,7 +113,7 @@ function getBestMove(board) {
         if (board[i] === "") {
             board[i] = bot;
             let moveVal = minimax(board, 0, false);
-            board[i] = ""; // Hamleyi geri al
+            board[i] = ""; // Undo the move
             if (moveVal > bestVal) {
                 move = i;
                 bestVal = moveVal;

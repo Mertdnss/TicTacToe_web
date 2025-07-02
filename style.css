@@ -35,6 +35,7 @@ body {
     grid-template-rows: repeat(3, 100px);
     gap: 10px;
     margin-bottom: 20px;
+    position: relative;
 }
 
 .cell {
@@ -93,3 +94,43 @@ body {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(0, 114, 255, 0.6);
 }
+
+
+.rounDcounter {
+    font-weight: 600;
+}
+.rounDcounter.x {
+    color: #00c6ff;
+}
+
+.rounDcounter.o {
+    color: #ff007f;
+}
+
+.strike {
+    position: absolute;
+    background-color: #ff007f;
+    height: 5px;
+    border-radius: 2px;
+    transform-origin: left;
+    animation: draw-strike 0.5s ease-out forwards;
+    display: none;
+}
+
+@keyframes draw-strike {
+    from {
+        transform: scaleX(0);
+    }
+    to {
+        transform: scaleX(1);
+    }
+}
+
+.strike-row-1 { top: 50px; width: 320px; display: block; }
+.strike-row-2 { top: 160px; width: 320px; display: block; }
+.strike-row-3 { top: 270px; width: 320px; display: block; }
+.strike-col-1 { left: 50px; height: 320px; width: 5px; top: 0; display: block; }
+.strike-col-2 { left: 160px; height: 320px; width: 5px; top: 0; display: block; }
+.strike-col-3 { left: 270px; height: 320px; width: 5px; top: 0; display: block; }
+.strike-diag-1 { top: 160px; left: -10px; width: 340px; transform: rotate(45deg); display: block; }
+.strike-diag-2 { top: 160px; left: -10px; width: 340px; transform: rotate(-45deg); display: block; }
