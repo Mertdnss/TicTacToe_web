@@ -1,0 +1,95 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background: linear-gradient(135deg, #1f1c2c, #3a3a52); /* New Gradient */
+    color: #fff;
+}
+
+.container {
+    text-align: center;
+    background: rgba(255, 255, 255, 0.05); /* Glassmorphism effect */
+    backdrop-filter: blur(10px);
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.title {
+    font-size: 3em;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    background: -webkit-linear-gradient(45deg, #ff8a00, #e52e71); /* Title Gradient */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.board {
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    grid-template-rows: repeat(3, 100px);
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.cell {
+    width: 100px;
+    height: 100px;
+    background: rgba(0, 0, 0, 0.2); /* Darker, semi-transparent cells */
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.cell:hover {
+    background-color: rgba(0, 0, 0, 0.4);
+    transform: scale(1.05); /* Add a little pop on hover */
+}
+
+/* Styling for X and O */
+.cell.x {
+    color: #00c6ff;
+}
+
+.cell.o {
+    color: #ff007f;
+}
+
+.status-area {
+    margin-bottom: 20px;
+}
+
+.status-text {
+    font-size: 1.5em;
+    font-weight: 400;
+}
+
+.restart-btn {
+    background: linear-gradient(45deg, #00c6ff, #0072ff); /* Button Gradient */
+    color: #fff;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1em;
+    font-weight: 600;
+    border-radius: 10px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 15px rgba(0, 114, 255, 0.4);
+}
+
+.restart-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 114, 255, 0.6);
+}
