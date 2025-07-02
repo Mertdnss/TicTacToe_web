@@ -1,4 +1,3 @@
-
 const cellBtn = document.querySelectorAll(".cell");
 const rounDcounter = document.querySelector(".rounDcounter");
 const restartBtn = document.querySelector(".restart-btn");
@@ -10,7 +9,7 @@ const bot = "O";
 
 let gameActive = true;
 let gameState = ["", "", "", "", "", "", "", "", ""];
-let isPlayerTurn = true;
+let isPlayerTurn = false;
 
 const winningConditions = [
     { combo: [0, 1, 2], strikeClass: "strike-row-1" },
@@ -32,7 +31,6 @@ function handleCellClick(clickedCellEvent) {
     }
 
     makeMove(clickedCellIndex, player);
-    isPlayerTurn = false;
 
     const playerWin = checkWin(gameState, player);
     if (playerWin) {
@@ -43,6 +41,11 @@ function handleCellClick(clickedCellEvent) {
         return;
     }
 
+    isPlayerTurn = false;
+    botTurn();
+}
+
+function botTurn() {
     statusText.innerHTML = 'Bot düşünüyor...';
     setTimeout(() => {
         const bestMove = getBestMove(gameState);
@@ -91,17 +94,23 @@ function endGame(message, strikeClass) {
     }
 }
 
-function handleRestartGame() {
+function startGame() {
     gameActive = true;
-    isPlayerTurn = true;
+    isPlayerTurn = false;
     gameState = ["", "", "", "", "", "", "", "", ""];
-    statusText.innerHTML = `Sıradaki Oyuncu: <span class="rounDcounter">X</span>`;
+    statusText.innerHTML = `Sıradaki Oyuncu: <span class="rounDcounter">O</span>`;
     document.querySelectorAll('.cell').forEach(cell => {
         cell.innerHTML = "";
         cell.classList.remove('x', 'o');
     });
-    document.querySelector('.rounDcounter').innerHTML = 'X';
+    document.querySelector('.rounDcounter').innerHTML = 'O';
     strike.className = "strike";
+    botTurn();
+}
+
+
+function handleRestartGame() {
+    startGame();
 }
 
 // Minimax Algorithm
@@ -157,3 +166,5 @@ cellBtn.forEach((cell, index) => {
 });
 
 restartBtn.addEventListener('click', handleRestartGame);
+
+startGame();
