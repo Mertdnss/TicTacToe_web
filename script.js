@@ -9,6 +9,7 @@ const bot = "O";
 
 let gameActive = true;
 let gameState = ["", "", "", "", "", "", "", "", ""];
+let isPlayerTurn = true;
 
 const winningConditions = [
     [0, 1, 2],
@@ -25,11 +26,12 @@ function handleCellClick(clickedCellEvent) {
     const clickedCell = clickedCellEvent.target;
     const clickedCellIndex = parseInt(clickedCell.getAttribute('data-index'));
 
-    if (gameState[clickedCellIndex] !== "" || !gameActive) {
+    if (gameState[clickedCellIndex] !== "" || !gameActive || !isPlayerTurn) {
         return;
     }
 
     makeMove(clickedCellIndex, player);
+    isPlayerTurn = false;
 
     if (checkWin(gameState, player)) {
         endGame("Kazandın!");
@@ -51,6 +53,7 @@ function handleCellClick(clickedCellEvent) {
             endGame("Berabere!");
         } else {
             statusText.innerHTML = `Sıradaki Oyuncu: <span class="rounDcounter">X</span>`;
+            isPlayerTurn = true;
         }
     }, 750);
 }
@@ -81,6 +84,7 @@ function endGame(message) {
 
 function handleRestartGame() {
     gameActive = true;
+    isPlayerTurn = true;
     gameState = ["", "", "", "", "", "", "", "", ""];
     statusText.innerHTML = `Sıradaki Oyuncu: <span class="rounDcounter">X</span>`;
     document.querySelectorAll('.cell').forEach(cell => {
